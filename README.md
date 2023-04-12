@@ -8,3 +8,9 @@ Autonomous Object and Creep Prediction for the Department of Energy's (DOE) Wast
 - Maximum of sm_86 GPU architecture (Built based on Geforce RTX 3060)
 - NVIDIA v530 drivers (CUDA 12.1 built in)
 - cuDNN v8.8.1
+
+## Start
+1. Open the file STEGO_WIPP.py or STEGO_WIPP.ipynb
+2. Change the directory variables and video name to fit your system
+3. Run code
+4. Results will be in src/videos
