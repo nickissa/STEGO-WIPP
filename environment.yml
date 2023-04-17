@@ -342,7 +342,7 @@ dependencies:
       - protobuf==3.20.3
       - pyasn1==0.4.8
       - pyasn1-modules==0.2.8
-      - pydensecrf==1.0rc2
+      # - pydensecrf==1.0rc2
       - pydeprecate==0.3.1
       - pyparsing==3.0.9
       - pytorch-lightning==2.0.1

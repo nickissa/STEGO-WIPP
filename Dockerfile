@@ -17,13 +17,25 @@ COPY . ./
 
 # Downgrade to conda 4.8 since it doesn't freeze on solving environment
 # RUN conda install conda=4.10
+# TRY NOT UPDATING CONDA
 RUN conda update conda
 
+# Install git
+RUN apt-get update && \
+    apt-get install -y git
+
 # Install mamba
-RUN conda install -c conda-forge mamba
+# RUN conda install -c conda-forge mamba
+
+# Install cython and pydensecrf
+# TODO: Fix wheel build error for pydensecrf
+RUN pip install cython && \
+    #pip install git+https://github.com/lucasb-eyer/pydensecrf
+    conda install -c conda-forge pydensecrf
+    #pip install pydensecrf==1.0rc2 
 
 # Create the stegowipp environment and activate it
-RUN mamba env create -f environment.yml
+RUN conda env create -f environment.yml
 RUN conda activate stegowipp
 
 

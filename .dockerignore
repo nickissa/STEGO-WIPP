@@ -1,0 +1,10 @@
+models/*
+data/*
+src/.env
+results/predictions/*
+src/iarpa
+src/videos/*
+checkpoints/*
+logs/*
+saved_models/*
+src/images/*

@@ -1,6 +1,6 @@
 import os
 from os.path import join
-srcDIR = "/home/robotics/Documents/ARCJupyter/STEGOTest/src/"
+srcDIR = "/home/robotics/Documents/ARCJupyter/STEGOWIPP/src/"
 os.chdir(srcDIR)
 saved_models_dir = join("..", "saved_models")
 os.makedirs(saved_models_dir, exist_ok=True)
@@ -28,7 +28,7 @@ import time
 import numpy as np
 
 # Pre-recorded video
-vid = cv2.VideoCapture('/home/robotics/Documents/ARCJupyter/STEGOTest/src/videos/videofile2.mp4')
+vid = cv2.VideoCapture('/home/robotics/Documents/ARCJupyter/STEGOWIPP/src/videos/ARC_Video.MOV')
 
 # Resolution of vid
 size = (
@@ -38,14 +38,14 @@ size = (
 
 #size = (448, 448)
 
-vidDIR = '/home/robotics/Documents/ARCJupyter/STEGOTest/src/videos/processed/'
+vidDIR = '/home/robotics/Documents/ARCJupyter/STEGOWIPP/src/videos/processed/'
 
 # Set properties of output video/image to be read in
 codec = cv2.VideoWriter_fourcc(*'mp4v')
-output = cv2.VideoWriter(os.path.join(vidDIR, 'STEGOTestVid_1920x1080_30fps.avi'), codec, 30.0, size)
+output = cv2.VideoWriter(os.path.join(vidDIR, 'ARCSTEGOTestVid_30fps.avi'), codec, 30.0, size)
 
 filename = 'tempimage.png'
-tempimgDIR = '/home/robotics/Documents/ARCJupyter/STEGOTest/src/videos/tempimages/'
+tempimgDIR = '/home/robotics/Documents/ARCJupyter/STEGOWIPP/src/videos/tempimages/'
 os.chdir(tempimgDIR)
 
 starttime = time.time()
