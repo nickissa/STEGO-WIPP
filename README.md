@@ -14,3 +14,13 @@ Autonomous Object and Creep Prediction for the Department of Energy's (DOE) Wast
 2. Change the directory variables and video name to fit your system
 3. Run code
 4. Results will be in src/videos
+
+## Docker Start
+1. Create Docker image locally:
+```
+docker build -t stegowipp # stegowipp can be replaced with any name you want
+```
+2. Run Docker image to create Docker container:
+```
+docker run stegowipp # if stegowipp wasn't used on image name, use the name chosen in the previous step
+```
