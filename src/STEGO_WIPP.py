@@ -1,7 +1,16 @@
 import os
 from os.path import join
-srcDIR = "/home/robotics/Documents/ARCJupyter/STEGOWIPP/src/"
-os.chdir(srcDIR)
+
+# Grab environment variables
+ROOTDIR = os.getenv('ROOTDIR')      # root directory
+SRCDIR = os.getenv('SRCDIR')        # source code directory
+RESULTS = os.getenv('RESULTS')      # resulting video directory
+TEMPIMG = os.getenv('TEMPIMG')      # temporary image directory
+
+PRCMODE = os.getenv('PRCMODE')      # either 'linear' or 'cluster'
+VIDEO = os.getenv('VIDEO')          # location of prerecorded video
+
+os.chdir(SRCDIR)
 saved_models_dir = join("..", "saved_models")
 os.makedirs(saved_models_dir, exist_ok=True)
 
@@ -28,25 +37,22 @@ import time
 import numpy as np
 
 # Pre-recorded video
-vid = cv2.VideoCapture('/home/robotics/Documents/ARCJupyter/STEGOWIPP/src/videos/ARC_Video.MOV')
+vid = cv2.VideoCapture(VIDEO)
 
 # Resolution of vid
-size = (
-    int(vid.get(cv2.CAP_PROP_FRAME_WIDTH)),
-    int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
-)
+# size = (
+#     int(vid.get(cv2.CAP_PROP_FRAME_WIDTH)),
+#     int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
+# )
 
-#size = (448, 448)
-
-vidDIR = '/home/robotics/Documents/ARCJupyter/STEGOWIPP/src/videos/processed/'
+size = (448, 448)
 
 # Set properties of output video/image to be read in
 codec = cv2.VideoWriter_fourcc(*'mp4v')
-output = cv2.VideoWriter(os.path.join(vidDIR, 'ARCSTEGOTestVid_30fps.avi'), codec, 30.0, size)
+output = cv2.VideoWriter(os.path.join(RESULTS, 'ProcessedVidSTEGOWIPP.avi'), codec, 30.0, size)
 
 filename = 'tempimage.png'
-tempimgDIR = '/home/robotics/Documents/ARCJupyter/STEGOWIPP/src/videos/tempimages/'
-os.chdir(tempimgDIR)
+os.chdir(TEMPIMG)
 
 starttime = time.time()
 
@@ -69,7 +75,7 @@ while(True):
 # --------------------------------------------------------------------------------------------------
     # Save frame as 'tempimage.png' each time and process that file
     cv2.imwrite(filename, frame)
-    img = cv2.imread(os.path.join(tempimgDIR, filename))
+    img = cv2.imread(os.path.join(TEMPIMG, filename))
     img = Image.fromarray(img, mode="RGB")
     transform = get_transform(448, False, "center")
     img = transform(img).unsqueeze(0).cuda()
@@ -81,20 +87,26 @@ while(True):
         code2 = model(img.flip(dims=[3]))
         code  = (code1 + code2.flip(dims=[3])) / 2
         code = F.interpolate(code, img.shape[-2:], mode='bilinear', align_corners=False)
-        linear_probs = torch.log_softmax(model.linear_probe(code), dim=1).cpu()
-        cluster_probs = model.cluster_probe(code, 2, log_probs=True).cpu()
-
-        single_img = img[0].cpu()
-        linear_pred = dense_crf(single_img, linear_probs[0]).argmax(0)
-        cluster_pred = dense_crf(single_img, cluster_probs[0]).argmax(0)
-    
-        linearres = model.label_cmap[linear_pred].astype('uint8')
-        clusterres = model.label_cmap[linear_pred].astype('uint8')
         
-        # Save processed images/video
-        output.write(linearres)
-        #cv2.imshow('Cluster Predictions', clusterres)
-        cv2.imshow('Linear Predictions', linearres)
+        if PRCMODE == "linear":
+            linear_probs = torch.log_softmax(model.linear_probe(code), dim=1).cpu()
+            single_img = img[0].cpu()
+            linear_pred = dense_crf(single_img, linear_probs[0]).argmax(0)
+            linearres = model.label_cmap[linear_pred].astype('uint8')
+
+            # Save processed images/video
+            output.write(linearres)
+            cv2.imshow('Linear Predictions', linearres)
+
+        if PRCMODE == "cluster":
+            cluster_probs = model.cluster_probe(code, 2, log_probs=True).cpu()
+            single_img = img[0].cpu()
+            cluster_pred = dense_crf(single_img, cluster_probs[0]).argmax(0)
+            clusterres = model.label_cmap[cluster_pred].astype('uint8')
+
+            # Save processed images/video
+            output.write(clusterres)
+            cv2.imshow('Cluster Predictions', clusterres)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
