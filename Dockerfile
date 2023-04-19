@@ -1,23 +1,30 @@
-# Dockerfile for a STEGO image made by Nicolas Issa
+# Dockerfile for a STEGOWIPP image made by Nicolas Issa
 # Comment using the # symbol to debug any lines of code
 # (Ctrl + /) comments/uncomments all highlighted lines of code
 FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime
 
+# Create working directory to be /app/STEGOWIPP
 WORKDIR /app
+RUN mkdir STEGOWIPP
+WORKDIR /app/STEGOWIPP
 
-# Environmental Variables
-ENV ROOTDIR=/STEGOWIPP
-ENV VIDEODIR=/STEGOWIPP/src/videos
-ENV SRCDIR=/STEGOWIPP/src
+# Default Environmental Variables
+# PRCMODE can be either linear or cluster
+ENV ROOTDIR="/app/STEGOWIPP/"
+ENV SRCDIR="/app/STEGOWIPP/src/"
+ENV RESULTS="/app/STEGOWIPP/src/videos/processed/"
+ENV TEMPIMG="/app/STEGOWIPP/src/videos/tempimages/"
 
-COPY . ./
+ENV VIDEO="/app/STEGOWIPP/src/videos/ARC_Video.MOV"
+ENV PRCMODE="linear"
+
+COPY . /app/STEGOWIPP
 
 # Set default shell to Bash and add 'conda' command to the PATH env variable
 SHELL ["/bin/bash", "--login", "-c"]
 ENV PATH /opt/conda/bin:$PATH
 
-# Downgrade to conda 4.8 since it doesn't freeze on solving environment
-# RUN conda install conda=4.10
+# Update conda to the latest version
 RUN conda update conda
 
 # Install git
@@ -36,63 +43,6 @@ RUN conda init bash && \
 
 RUN source activate stegowipp
 
-CMD [ "python", "./STEGOWIPP/src/STEGO_WIPP.py" ]
-
-
-
-
-
-
-
-
-
-
-
-
-# # Open port 8888
-# EXPOSE 8888
-
-# # Install anaconda
-# RUN apt-get update && \
-#     apt-get install -y wget bzip2 git && \
-#     rm -rf /var/lib/apt/lists/*
-
-# RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-x86_64.sh -O ~/anaconda.sh && \
-#     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
-#     rm ~/anaconda.sh
-
-# # Downgrade to conda 4.8 since it doesn't freeze on solving environment
-# # RUN conda install conda=4.8
-
-# ENV PATH /opt/conda/bin:$PATH
-
-# # Prereqs for pytorch build from source
-# RUN conda install cmake ninja
-
-# RUN git clone --recursive https://github.com/pytorch/pytorch.git && \
-#     cd pytorch && \
-#     git checkout tags/v2.0.0 -b v2.0.0
-
-# WORKDIR /pytorch
-# RUN make -f docker.Makefile
-
-# # # Build pytorch from source
-# # RUN apt-get update && \
-# #     apt-get install -y git cmake ninja && \
-# #     pip install numpy
-# #
-# # RUN git clone --recursive https://github.com/pytorch/pytorch.git && \
-# #     cd pytorch && \
-# #     git checkout tags/v2.0.0 -b v2.0.0
-# #
-# # RUN pip install -r requirements.txt
-# #
-# # # Linux dependencies
-# # RUN conda install mkl mkl-include && \
-# #     conda install -c pytorch magma-cuda117
-# #
-# # RUN cd pytorch && \
-# #     export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"} && \
-# #     python setup.py develop
-# #
-# # RUN python -c 'import torch; print(torch.__version__)'
+# Run STEGO_WIPP.py when container is run
+# Curr DIR is /app/STEGOWIPP/
+CMD ["python", "/app/STEGOWIPP/src/STEGO_WIPP.py"]
