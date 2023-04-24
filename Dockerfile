@@ -33,6 +33,7 @@ RUN apt-get update && \
 
 # Install cython and pydensecrf
 RUN pip install cython && \
+    pip install wget && \
     conda install -c conda-forge pydensecrf
 
 # Create the stegowipp environment and activate it
