@@ -47,6 +47,4 @@ SHELL ["conda", "run", "-n", "stegowipp", "/bin/bash", "-c"]
 
 # Run STEGO_WIPP.py when container is run
 # Curr DIR is /app/STEGOWIPP/
-# CMD ["python", "/app/STEGOWIPP/src/STEGO_WIPP.py"]
-# Doesn't work since the directory doesn't exist
 CMD ["conda", "run", "-n", "stegowipp", "python", "/app/STEGOWIPP/src/STEGO_WIPP.py"]
