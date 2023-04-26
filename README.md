@@ -16,7 +16,7 @@ Autonomous Object and Creep Prediction for the Department of Energy's (DOE) Wast
  ```
 2. Open the file /src/STEGO_WIPP.py
 3. Change the directory variables and video name to fit your system
-4. Run code
+4. Run code on stegowipp environment created in Step 1
 5. Results will be in src/videos
 
 ## Docker Start
