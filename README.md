@@ -10,7 +10,7 @@ Autonomous Object and Creep Prediction for the Department of Energy's (DOE) Wast
 - cuDNN v8.8.1
 
 ## Start
-1. Open the file STEGO_WIPP.py
+1. Open the file /src/STEGO_WIPP.py
 2. Change the directory variables and video name to fit your system
 3. Run code
 4. Results will be in src/videos
