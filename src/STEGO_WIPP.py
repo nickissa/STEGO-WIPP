@@ -1,14 +1,24 @@
 import os
 from os.path import join
 
-# Grab environment variables
-ROOTDIR = os.getenv('ROOTDIR')      # root directory
-SRCDIR = os.getenv('SRCDIR')        # source code directory
-RESULTS = os.getenv('RESULTS')      # resulting video directory
-TEMPIMG = os.getenv('TEMPIMG')      # temporary image directory
+# Grab environment variables or set default local ones
+if os.getenv('ROOTDIR'):
+    ROOTDIR = os.getenv('ROOTDIR')      # root directory
+    SRCDIR = os.getenv('SRCDIR')        # source code directory
+    RESULTS = os.getenv('RESULTS')      # resulting video directory
+    TEMPIMG = os.getenv('TEMPIMG')      # temporary image directory
 
-PRCMODE = os.getenv('PRCMODE')      # either 'linear' or 'cluster'
-VIDEO = os.getenv('VIDEO')          # location of prerecorded video
+    PRCMODE = os.getenv('PRCMODE')      # either 'linear' or 'cluster'
+    VIDEO = os.getenv('VIDEO')          # location of prerecorded video
+
+else:
+    ROOTDIR = os.path.abspath("../")
+    SRCDIR = os.path.join(ROOTDIR, "src/")
+    RESULTS = os.path.join(ROOTDIR, "src/videos/processed/")
+    TEMPIMG = os.path.join(ROOTDIR, "src/videos/tempimages/")
+
+    PRCMODE = "linear"
+    VIDEO = os.path.join(ROOTDIR, "src/videos/<video_name>") # CHANGE THIS TO FIT VIDEO NAME
 
 os.chdir(SRCDIR)
 saved_models_dir = join("..", "saved_models")
@@ -39,12 +49,14 @@ import numpy as np
 # Pre-recorded video
 vid = cv2.VideoCapture(VIDEO)
 
+# TODO: Fix resolution to fit 1920 x 1080
 # Resolution of vid
 # size = (
 #     int(vid.get(cv2.CAP_PROP_FRAME_WIDTH)),
 #     int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
 # )
 
+# Works defaultly since STEGO processes images with shape (448, 448, 3)
 size = (448, 448)
 
 # Set properties of output video/image to be read in

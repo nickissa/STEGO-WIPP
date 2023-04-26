@@ -15,7 +15,7 @@ ENV SRCDIR="/app/STEGOWIPP/src/"
 ENV RESULTS="/app/STEGOWIPP/src/videos/processed/"
 ENV TEMPIMG="/app/STEGOWIPP/src/videos/tempimages/"
 
-ENV VIDEO="/app/STEGOWIPP/src/videos/ARC_Video.MOV"
+ENV VIDEO="/app/STEGOWIPP/src/videos/<video_name>"
 ENV PRCMODE="linear"
 
 COPY . /app/STEGOWIPP
