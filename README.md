@@ -28,3 +28,4 @@ docker run stegowipp # if stegowipp wasn't used on image name, use the name chos
 ## TODO
 1. Fix resolution to fit 1920 x 1080.
 2. Get working with GPU.
+3. Grab the numpy arrays before they are processed.
