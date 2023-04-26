@@ -38,12 +38,15 @@ RUN pip install cython && \
 
 # Create the stegowipp environment and activate it
 RUN conda env create -f environment.yml
+SHELL ["conda", "run", "-n", "stegowipp", "/bin/bash", "-c"]
 
-RUN conda init bash && \
-    source ~/.bashrc
+# RUN conda init bash && \
+#     source ~/.bashrc
 
-RUN source activate stegowipp
+# RUN source activate stegowipp
 
 # Run STEGO_WIPP.py when container is run
 # Curr DIR is /app/STEGOWIPP/
-CMD ["python", "/app/STEGOWIPP/src/STEGO_WIPP.py"]
+# CMD ["python", "/app/STEGOWIPP/src/STEGO_WIPP.py"]
+# Doesn't work since the directory doesn't exist
+CMD ["conda", "run", "-n", "stegowipp", "python", "/app/STEGOWIPP/src/STEGO_WIPP.py"]
